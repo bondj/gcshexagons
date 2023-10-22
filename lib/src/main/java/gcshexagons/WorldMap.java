@@ -14,7 +14,7 @@ import gcshexagon.coordinates.HexCoordinates;
 public class WorldMap<T> {
 
 	private final Map<HexCoordinates, Set<T>> combinedMarkers = new HashMap<>();
-
+	
 	public WorldMap(Map<HexCoordinates, Collection<T>> markers) {
 		for (var marker : markers.entrySet()) {
 			for (var direction : HexGridToGcsGridMappings.DIRECTIONS) {
@@ -28,8 +28,9 @@ public class WorldMap<T> {
 
 	public WorldMap(Collection<T> markers, Function<T, HexCoordinates> func) {
 		for (var marker : markers) {
+			HexCoordinates gridCoordinates = func.apply(marker);
 			for (var direction : HexGridToGcsGridMappings.DIRECTIONS) {
-				HexCoordinates gridCoordinates = func.apply(marker);
+				
 				HexCoordinates newLocation = HexCoordinates.of(gridCoordinates.column() + direction[0],
 						gridCoordinates.row() + direction[1]);
 				combinedMarkers.computeIfAbsent(newLocation, m -> new HashSet<T>()).add(marker);
